@@ -33,11 +33,12 @@ def login(request):
         if Email and Password:
             check = user.objects.filter(email=Email, password=Password)
             if check.exists():
-                return HttpResponse('Account Exists')
+                # Show login.html with success message
+                return render(request, 'login.html', {'success': 'Login successful!'})
             else:
-                return HttpResponse('Invalid credentials')
+                # Show login.html with error message
+                return render(request, 'login.html', {'error': 'Invalid credentials'})
         else:
-            return HttpResponse('Missing email or password')
+            return render(request, 'login.html', {'error': 'Missing email or password'})
 
-    #return render(request, 'login.html')
-    return HttpResponse('Failed')
+    return render(request, 'login.html')

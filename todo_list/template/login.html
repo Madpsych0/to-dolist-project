@@ -37,6 +37,13 @@
 						Login into your Account
 					</span>
 
+					{% if error %}
+						<div class="alert alert-danger">{{ error }}</div>
+					{% endif %}
+					{% if success %}
+						<div class="alert alert-success">{{ success }}</div>
+					{% endif %}
+
 					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
 						<input class="input100" type="text" name="email" placeholder="Email Address">
 						<span class="focus-input100"></span>
