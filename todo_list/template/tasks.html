@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}To-Do List{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+  <main class="container">
+    <h1>To-Do</h1>
+
+    <form id="taskForm" method="POST" action="{% url 'add_task' %}">
+      {% csrf_token %}
+      <input type="text" name="task" id="taskInput" placeholder="Add a new task..." required>
+      <button type="submit">Add</button>
+    </form>
+
+    <ul id="taskList">
+      {% for task in tasks %}
+        <li>{{ task.title }}</li>
+      {% empty %}
+        <li>No tasks yet.</li>
+      {% endfor %}
+    </ul>
+  </main>
+</body>
+</html>
+

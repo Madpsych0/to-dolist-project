@@ -36,7 +36,6 @@
 					<span class="login100-form-title">
 						Login into your Account
 					</span>
-
 					{% if error %}
 						<div class="alert alert-danger">{{ error }}</div>
 					{% endif %}
@@ -76,6 +75,14 @@
 			</div>
 		</div>
 	</div>
+
+	{% if redirect %}
+	<script>
+	    setTimeout(function() {
+	        window.location.href = "{% url 'task' %}";
+	    }, 2000); // 2 seconds delay
+	</script>
+	{% endif %}
 
 <!--===============================================================================================-->	
 	<script src="{% static 'vendor/jquery/jquery-3.2.1.min.js' %}"></script>
