@@ -14,6 +14,7 @@ class task(models.Model):
     user = models.ForeignKey(user, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
-    
+    completed = models.BooleanField(default=False)  # <-- Add this field
+
     def __str__(self):
         return self.title

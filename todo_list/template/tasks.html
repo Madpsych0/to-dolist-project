@@ -1,29 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
-{% load static %}
 <head>
+  {% load static %}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}To-Do List{% endblock %}</title>
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <style>
+    .task-card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+      background: #f9f9f9;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .task-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .task-title.completed {
+      text-decoration: line-through;
+      color: #888;
+    }
+    .task-date {
+      font-size: 0.85em;
+      color: #999;
+    }
+    .task-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .delete-btn {
+      background: #ff4d4d;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 4px 8px;
+      cursor: pointer;
+    }
+    .logout-btn {
+      position: fixed;
+      top: 24px;
+      right: 32px;
+      background: #333;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 18px;
+      font-size: 1em;
+      cursor: pointer;
+      z-index: 1001;
+    }
+    .logout-btn:hover {
+      background: #555;
+    }
+  </style>
 </head>
 <body>
+  <!-- Logout Button -->
+  <form method="POST" action="{% url 'logout' %}" style="margin:0;">
+    {% csrf_token %}
+    <button type="submit" class="logout-btn">Log Out</button>
+  </form>
   <main class="container">
     <h1>To-Do</h1>
-
     <form id="taskForm" method="POST" action="{% url 'add_task' %}">
       {% csrf_token %}
       <input type="text" name="task" id="taskInput" placeholder="Add a new task..." required>
       <button type="submit">Add</button>
     </form>
-
-    <ul id="taskList">
+    <div id="taskList">
       {% for task in tasks %}
-        <li>{{ task.title }}</li>
+        <div class="task-card">
+          <div class="task-info">
+            <form method="POST" action="{% url 'mark_done' task.id %}">
+              {% csrf_token %}
+              <input type="checkbox" onchange="this.form.submit()" {% if task.completed %}checked{% endif %}>
+            </form>
+            <span class="task-title {% if task.completed %}completed{% endif %}">{{ task.title }}</span>
+            <span class="task-date">{{ task.created_at|date:"Y-m-d H:i" }}</span>
+          </div>
+          <div class="task-actions">
+            <form method="POST" action="{% url 'delete_task' task.id %}" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" class="delete-btn">Delete</button>
+            </form>
+          </div>
+        </div>
       {% empty %}
-        <li>No tasks yet.</li>
+        <p>No tasks yet.</p>
       {% endfor %}
-    </ul>
+    </div>
   </main>
 </body>
 </html>
